@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roman Numeral Converter</title>
+</head>
+<body>  
+      <form> 
+        <label>Enter a Roman Numeral</label>
+        <input id="romanInput" type="text"></input><br/>
+        <input id="romanSubmit" type="submit" value="Submit" onclick="numeralConverter()"></input>
+      </form>
+
+      <br> <br>
+
+      <form> 
+        <label>Enter a Decimal Number</label>
+        <input id="decimalInput" type="text"></input><br/>
+        <input id="decimalSubmit" type="submit" value="Submit" onclick="decimalConverter()"></input>
+      </form>
+</body>
+
+<script>
+    function numeralConverter() {
+        //Gets user input and splits the characters into an array
+        var numeral = document.getElementById("romanInput").value;
+        var numeralArray = numeral.split("");
+
+        var valueArray = [];
+        let results = 0;
+
+        //Pushes onto valueArray the value of the roman numeral. 
+        for (let i = 0; i < numeralArray.length; i++) {
+            if (numeralArray[i] == 'M') {
+                valueArray[i] = 1000;
+            }
+            else if (numeralArray[i] == 'D') {
+                valueArray[i] = 500;
+            }
+            else if (numeralArray[i] == 'C') {
+                valueArray[i] = 100;
+            }
+            else if (numeralArray[i] == 'L') {
+                valueArray[i] = 50;
+            }            
+            else if (numeralArray[i] == 'X') {
+                valueArray[i] = 10;
+            }
+            else if (numeralArray[i] == 'V') {
+                valueArray[i] = 5;
+            }
+            else if (numeralArray[i] == 'I') {
+                valueArray[i] = 1;
+            }
+        }
+
+        for (let i = 0; i < valueArray.length; i++) {
+
+            //This accounts for uneven character total roman numerals
+            if (valueArray.length % 2 != 0 && i == 0 ) {
+                results += valueArray[0];
+            }
+
+            //If the numbers next to each other are each proceed to add them to the total.
+            // i++ skips to the next two values in the array
+            else if (valueArray[i] >= valueArray[i + 1]) {
+                results += valueArray[i] + valueArray[i + 1];
+                i++;
+            }
+
+            //If the previous number was less than, subract the two values.
+            // i++ skips to the next two values in the array
+            else {
+                results += valueArray[i + 1] - valueArray[i];
+                i++; 
+            }
+
+        }
+        alert("The value of that roman numeral is " + results);
+    }
+
+    function decimalConverter() {
+        //Get user input and converts it into an int
+        var decimal = document.getElementById("decimalInput").value;
+        decimal = parseInt(decimal);
+
+        var numeralArray = [];
+        let results = "";
+
+        //decimal is the running total as I subtract from it.
+        //varCount keeps track of how many times the roman numeral 
+        //needs to be pushed to the output array.
+        //The if statements account for times when the there is a
+        //more effective combination of roman numerals.
+
+        // M or 1000
+        var mCount = decimal / 1000;
+        mCount = Math.floor(mCount);
+        for (let i = 0; i < mCount; i++) {
+            numeralArray.push("M");
+        }
+        decimal = decimal % 1000;
+        if (decimal >= 900) {
+            numeralArray.push("C", "M");
+            decimal -= 900;
+        }
+
+        //D or 500
+        var dCount = decimal / 500;
+        dCount = Math.floor(dCount);
+        for (let i = 0; i < dCount; i++) {
+            numeralArray.push("D");
+        }
+        decimal = decimal % 500;
+        if (decimal >= 400) {
+            numeralArray.push("C", "D");
+            decimal -= 400;
+        }
+
+        //C or 100
+        var cCount = decimal / 100;
+        cCount = Math.floor(cCount);
+        for (let i = 0; i < cCount; i++) {
+            numeralArray.push("C")
+        }
+        decimal = decimal % 100;
+        if (decimal >= 90) {
+            numeralArray.push("X", "C");
+            decimal -= 90;
+        }
+
+        //L or 50
+        var lCount = decimal / 50;
+        lCount = Math.floor(lCount);
+        for (let i = 0; i < lCount; i++) {
+            numeralArray.push("L")
+        }
+        decimal = decimal % 50;
+        if (decimal >= 40) {
+            numeralArray.push("X", "L");
+            decimal -= 40;
+        }
+
+        //X or 10
+        var xCount = decimal / 10;
+        xCount = Math.floor(xCount);
+        for (let i = 0; i < xCount; i++) {
+            numeralArray.push("X")
+        }
+        decimal = decimal % 10;  
+        if (decimal >= 9) {
+            numeralArray.push("I", "X");
+            decimal -= 9;
+        }
+
+        //V or 5
+        var vCount = decimal / 5;
+        vCount = Math.floor(vCount);
+        for (let i = 0; i < vCount; i++) {
+            numeralArray.push("V")
+        }
+        decimal = decimal % 5;
+        if (decimal >= 4) {
+            numeralArray.push("I", "V");
+            decimal -= 4;
+        }
+
+        //I or 1
+        var iCount = decimal / 1;
+        iCount = Math.floor(iCount);
+        for (let i = 0; i < iCount; i++) {
+            numeralArray.push("I")
+        }
+
+        for (let i = 0; i < numeralArray.length; i++) {
+            results += numeralArray[i]
+        }
+
+        alert("The roman numeral for that number is " + results)
+    }
+</script>
+
+</html>
